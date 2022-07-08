@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String   @id @default(uuid())
+  name       String
+  email      String
+  password   String
+  created_at DateTime @default(now())
+
+  UserRole      UserRole[]
+  UserPermition UserPermition[]
+  @@map("users")
+}
+
+model Role {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  created_at  DateTime @default(now())
+
+  UserRole      UserRole[]
+  PermitionRole PermitionRole[]
+  @@map("roles")
+}
+
+model UserRole {
+  user User @relation(fields: [userId], references: [id])
+  role Role @relation(fields: [roleId], references: [id])
+
+  userId String
+  roleId String
+
+  @@id([userId, roleId])
+  @@map("usersroles")
+}
+
+model Permission {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  created_at  DateTime @default(now())
+
+  UserPermition UserPermition[]
+  PermitionRole PermitionRole[]
+  @@map("permissions")
+}
+
+model UserPermition {
+  user      User       @relation(fields: [userId], references: [id])
+  permition Permission @relation(fields: [permissionId], references: [id])
+
+  userId       String
+  permissionId String
+  @@id([userId, permissionId])
+  @@map("usersPermitions")
+}
+
+model PermitionRole {
+  role      Role       @relation(fields: [roleId], references: [id])
+  permition Permission @relation(fields: [permissionId], references: [id])
+
+  roleId       String
+  permissionId String
+  @@id([roleId, permissionId])
+  @@map("permitionsroles")
+}
