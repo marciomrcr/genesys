@@ -30,3 +30,26 @@ yarn dev
 yarn add express
 yarn add @types/express -D
 
+### instalação do prisma
+yarn add prisma -D
+yarn add @prisma/client
+yarn prisma init
+
+### criação das tabelas após configurar a model
+model User {
+  id    String @id @default(uuid())
+  name  String
+  email String
+
+  @@map("users")
+}
+
+### Gerar a atbela
+yarn prisma migrate dev
+
+### ver as tabelas no navegador
+yarn prisma studio
+
+### dentro da pasta src criar o arquivo
+prisma.ts
+

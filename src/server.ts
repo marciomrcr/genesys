@@ -19,4 +19,18 @@ app.post('/users', async (req, res) => {
   return res.status(201).json({ data: user });
 });
 
+app.post('/roles', async (req, res) => {
+  const { name, description } = req.body;
+
+  const role = await prisma.role.create({
+    data: {
+      name,
+      description
+    },
+  });
+
+  return res.status(201).json({ data: role });
+});
+
+
 app.listen(3333, () => console.log('API is running'));

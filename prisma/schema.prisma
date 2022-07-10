@@ -18,7 +18,7 @@ model User {
   created_at DateTime @default(now())
 
   UserRole      UserRole[]
-  UserPermition UserPermition[]
+  UserPermission UserPermission[]
   @@map("users")
 }
 
@@ -29,7 +29,7 @@ model Role {
   created_at  DateTime @default(now())
 
   UserRole      UserRole[]
-  PermitionRole PermitionRole[]
+  PermissionRole PermissionRole[]
   @@map("roles")
 }
 
@@ -50,27 +50,27 @@ model Permission {
   description String
   created_at  DateTime @default(now())
 
-  UserPermition UserPermition[]
-  PermitionRole PermitionRole[]
+  UserPermission UserPermission[]
+  PermissionRole PermissionRole[]
   @@map("permissions")
 }
 
-model UserPermition {
+model UserPermission {
   user      User       @relation(fields: [userId], references: [id])
-  permition Permission @relation(fields: [permissionId], references: [id])
+  permission Permission @relation(fields: [permissionId], references: [id])
 
   userId       String
   permissionId String
   @@id([userId, permissionId])
-  @@map("usersPermitions")
+  @@map("usersPermissions")
 }
 
-model PermitionRole {
+model PermissionRole {
   role      Role       @relation(fields: [roleId], references: [id])
-  permition Permission @relation(fields: [permissionId], references: [id])
+  permission Permission @relation(fields: [permissionId], references: [id])
 
   roleId       String
   permissionId String
   @@id([roleId, permissionId])
-  @@map("permitionsroles")
+  @@map("permissionsroles")
 }
