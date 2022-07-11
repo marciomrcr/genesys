@@ -1,6 +1,6 @@
 ### Criação do Backend ###
 yarn init -y
-yarn add typescrit
+yarn add typescript
 yarn add @types/node ts-node-dev -D
 
 ### criar o arquivo de config do TS
@@ -15,7 +15,7 @@ yarn tsc --init
 server.ts
 
 yarn tsc
-### Apgar a pasta dist
+### Apagar a pasta dist
 
 ### Criar o script do do ts-node-dev para reload automático da app
 no arquivo package.json incluir o código:
@@ -29,6 +29,8 @@ yarn dev
 
 yarn add express
 yarn add @types/express -D
+yarn add express-async-errors
+
 
 ### instalação do prisma
 yarn add prisma -D
@@ -44,7 +46,7 @@ model User {
   @@map("users")
 }
 
-### Gerar a atbela
+### Gerar a tabela
 yarn prisma migrate dev
 
 ### ver as tabelas no navegador
@@ -52,4 +54,9 @@ yarn prisma studio
 
 ### dentro da pasta src criar o arquivo
 prisma.ts
+
+### instalar o bcrypt
+yarn add bcryptjs
+yarn add @types/bcryptjs -D
+
 

@@ -10,67 +10,104 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Status {
+  Active
+  Inative
+}
+
+enum timeCourse {
+  Morning
+  Night
+}
+
 model User {
   id         String   @id @default(uuid())
   name       String
-  email      String
+  email      String   @unique
   password   String
+  status     Status   @default(Active)
   created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
-  UserRole      UserRole[]
-  UserPermission UserPermission[]
+  roles Role @relation(fields: [role_id], references: [id])
+
+  role_id String
   @@map("users")
 }
 
 model Role {
   id          String   @id @default(uuid())
-  name        String
+  name        String   @unique
   description String
   created_at  DateTime @default(now())
 
-  UserRole      UserRole[]
-  PermissionRole PermissionRole[]
+  users       User[]
+  permissions Permission[]
   @@map("roles")
-}
-
-model UserRole {
-  user User @relation(fields: [userId], references: [id])
-  role Role @relation(fields: [roleId], references: [id])
-
-  userId String
-  roleId String
-
-  @@id([userId, roleId])
-  @@map("usersroles")
 }
 
 model Permission {
   id          String   @id @default(uuid())
-  name        String
+  name        String   @unique
   description String
   created_at  DateTime @default(now())
 
-  UserPermission UserPermission[]
-  PermissionRole PermissionRole[]
+  roles Role[]
   @@map("permissions")
 }
 
-model UserPermission {
-  user      User       @relation(fields: [userId], references: [id])
-  permission Permission @relation(fields: [permissionId], references: [id])
+model Student {
+  id         String   @id @default(uuid())
+  name       String
+  email      String   @unique
+  password   String
+  status     Status   @default(Active)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
-  userId       String
-  permissionId String
-  @@id([userId, permissionId])
-  @@map("usersPermissions")
+  enrollments Enrollment[]
+
+  @@map("students")
 }
 
-model PermissionRole {
-  role      Role       @relation(fields: [roleId], references: [id])
-  permission Permission @relation(fields: [permissionId], references: [id])
+// Matriculas
+model Enrollment {
+  id         String   @id @default(uuid())
+  status     Status   @default(Active)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
-  roleId       String
-  permissionId String
-  @@id([roleId, permissionId])
-  @@map("permissionsroles")
+  students   Student @relation(fields: [student_id], references: [id])
+  student_id String
+
+  classes  Class  @relation(fields: [class_id], references: [id])
+  class_id String
+
+  @@map("enrollments")
+}
+
+model Course {
+  id         String   @id @default(uuid())
+  name       String   @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  Class Class[]
+  @@map("courses")
+}
+
+// Cursos. Ex: Discipulos, lideres, etc
+model Class {
+  id         String     @id @default(uuid())
+  name       String     @unique
+  time       timeCourse
+  status     Status     @default(Active)
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+
+  courses Course @relation(fields: [course_id], references: [id])
+
+  course_id  String
+  Enrollment Enrollment[]
+  @@map("classes")
 }
